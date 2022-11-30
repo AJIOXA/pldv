@@ -1,0 +1,11 @@
+set imap_user=dolgolevets65@gmail.com
+set imap_pass=ryouekorududwsia
+set folder=imaps://imap.gmail.com:993
+set spoolfile=+INBOX
+
+set smtp_pass=ryouekorududwsia
+set smtp_url=smtp://dolgolevets65@gmail.com@smtp.gmail.com:587
+set ssl_force_tls = yes
+set realname =GitHub
+set from =dolgolevets65@gmail.com
+set use_from = yes
