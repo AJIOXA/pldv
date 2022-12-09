@@ -1,4 +1,4 @@
-FROM1 alpine:latest
+FROM alpine:latest
 
 RUN apk update && apk upgrade
 RUN apk add bash
