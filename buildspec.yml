@@ -1,0 +1,40 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_DEFAULT_REGION: "us-east-1"
+    AWS_ACCOUNT_ID: "800757917002"
+    ECR_REPO_NAME: "docker-task-15"
+    ECR_IMAGE_TAG: "latest"
+
+phases:
+  install:
+    commands:
+      - echo "Version checking"
+      - aws --version
+      - git --version
+
+  pre_build:
+    commands:
+      - echo "Login to AWS ECR and get commit id"
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo $CODEBUILD_BUILD_NUMBER >> index.html
+
+  build:
+    commands:
+      - echo "Building the Docker image..."          
+      - docker build -t docker-task15:1.$CODEBUILD_BUILD_NUMBER .
+      - docker tag docker-task15:1.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-task15:latest
+      - docker tag docker-task15:1.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-task15:1.$CODEBUILD_BUILD_NUMBER
+      - echo "Done"
+
+  post_build:
+    commands:
+      - echo "Pushing the Docker image..."
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-task15:1.$CODEBUILD_BUILD_NUMBER
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-task15:latest
+      - printf '[{"name":"docker-task15","imageUri":"800757917002.dkr.ecr.us-east-1.amazonaws.com/docker-task15:latest"}]' > imagedefinitions.json
+      #- printf '[{"name":"WebContainter","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:latest > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
