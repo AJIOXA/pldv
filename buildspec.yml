@@ -2,6 +2,8 @@ version: 0.2
 
 env:
   variables:
+    DOCKERHUB_USERNAME: "ajioxxa"
+    DOCKERHUB_PASS: "Xolop30913"
     AWS_DEFAULT_REGION: "us-east-1"
     AWS_ACCOUNT_ID: "800757917002"
     ECR_REPO_NAME: "docker-task-15"
@@ -17,6 +19,7 @@ phases:
   pre_build:
     commands:
       - echo "Login to AWS ECR and get commit id"
+      - docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASS
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo $CODEBUILD_BUILD_NUMBER >> index.html
 
