@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     DOCKERHUB_USERNAME: "ajioxxa"
-    DOCKERHUB_PASS: "Xolop30913"
+    DOCKERHUB_PASS: "111111111111"
     AWS_DEFAULT_REGION: "us-east-1"
     AWS_ACCOUNT_ID: "800757917002"
     ECR_REPO_NAME: "docker-task-15"
